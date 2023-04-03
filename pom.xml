@@ -16,7 +16,8 @@
         <checkstyle-plugin.version>3.1.2</checkstyle-plugin.version>
         <checkstyle.version>10.9.1</checkstyle.version>
         <jupiter.version>5.9.2</jupiter.version>
-        <checkstyle.config.url>https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml</checkstyle.config.url>
+        <checkstyle.config.url>https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
+        </checkstyle.config.url>
     </properties>
 
     <dependencies>
@@ -41,6 +42,19 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.otus.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
