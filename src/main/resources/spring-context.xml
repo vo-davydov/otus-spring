@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="defaultResourceLoader" class="org.springframework.core.io.DefaultResourceLoader" />
+    <bean id="questionsReadService" class="ru.otus.service.impl.QuestionsReadServiceCSV" />
+
+    <bean id="gameService" class="ru.otus.service.impl.GameServiceImpl">
+        <constructor-arg ref="questionsReadService" />
+        <constructor-arg ref="defaultResourceLoader" />
+        <property name="questionResource" value="questions.csv" />
+    </bean>
+
+</beans>
