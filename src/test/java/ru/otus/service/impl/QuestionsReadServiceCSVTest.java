@@ -1,27 +1,26 @@
 package ru.otus.service.impl;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.core.io.DefaultResourceLoader;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import ru.otus.dao.QuestionDao;
+import ru.otus.dao.impl.QuestionDaoCSV;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class QuestionsReadServiceCSVTest {
 
-    private final static DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
-    private static QuestionsReadServiceCSV questionsReadServiceCSV;
+    private static QuestionDao questionDao;
 
-    @BeforeAll
-    public static void init() {
-        questionsReadServiceCSV = new QuestionsReadServiceCSV();
+    private final static String CSV = "questions.csv";
+
+    @BeforeEach
+    public void init() {
+        questionDao = new QuestionDaoCSV(CSV);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"questions.csv"})
-    void fileShouldHaveRightSize(String fileName) {
-        var resource = defaultResourceLoader.getResource(fileName);
-        var questions = questionsReadServiceCSV.getAllQuestions(resource);
+    @Test
+    void fileShouldHaveRightSize() {
+        var questions = questionDao.getAll();
         assertEquals(5, questions.size());
     }
 }

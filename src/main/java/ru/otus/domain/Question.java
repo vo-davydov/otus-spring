@@ -1,29 +1,22 @@
 package ru.otus.domain;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class Question {
     private final String question;
 
-    private final String[] answers;
+    private final List<Answer> answers;
 
-    private final int correctAnswer;
-
-    public Question(String question, String[] answers, int correctAnswer) {
+    public Question(String question, List<Answer> answers) {
         this.answers = answers;
-        this.correctAnswer = correctAnswer;
         this.question = question;
-    }
-
-    public boolean isAnswerCorrect(int answer) {
-        return correctAnswer == answer;
     }
 
     public String getQuestion() {
         return question;
     }
 
-    public String[] getAnswers() {
+    public List<Answer> getAnswers() {
         return answers;
     }
 
@@ -31,8 +24,7 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "question='" + question + '\'' +
-                ", answers=" + Arrays.toString(answers) +
-                ", correctAnswer=" + correctAnswer +
+                ", answers=" + answers +
                 '}';
     }
 }
