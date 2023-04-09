@@ -5,11 +5,11 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="gameService" class="ru.otus.service.impl.GameServiceImpl">
-        <constructor-arg ref="questionDao" />
+        <constructor-arg ref="questionDao"/>
     </bean>
 
     <bean id="questionDao" class="ru.otus.dao.impl.QuestionDaoCSV">
-        <constructor-arg value="questions.csv" />
+        <constructor-arg value="questions.csv"/>
     </bean>
 
 </beans>

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class QuestionsReadServiceCSVTest {
 
-    private static QuestionDao questionDao;
+    private QuestionDao questionDao;
 
     private final static String CSV = "questions.csv";
 

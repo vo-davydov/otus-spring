@@ -10,29 +10,32 @@ public class GameServiceImpl implements GameService {
 
     private final static Logger LOGGER = Logger.getLogger(GameServiceImpl.class.getName());
 
-    private final QuestionDao QuestionDao;
+    private final QuestionDao questionDao;
 
-    public GameServiceImpl(QuestionDao QuestionDao) {
-        this.QuestionDao = QuestionDao;
+    private final IOServiceStreams iOServiceStreams;
+
+    public GameServiceImpl(QuestionDao questionDao) {
+        this.questionDao = questionDao;
+        this.iOServiceStreams = new IOServiceStreams(System.out, System.in);
     }
 
     @Override
     public void start() {
-        var questions = QuestionDao.getAll();
+        var questions = questionDao.getAll();
 
         LOGGER.info(String.format("Questions: %s", questions));
 
         for (int i = 0; i < questions.size(); i++) {
             int questionNumber = i + 1;
             var question = questions.get(i);
-            System.out.printf("%s questions is: %s%n", questionNumber, question.getQuestion());
+            var msg = String.format("%s questions is: %s", questionNumber, question.question());
+            iOServiceStreams.outputString(msg);
             printAnswers(question);
         }
-
     }
 
     private void printAnswers(Question question) {
-        var answers = question.getAnswers();
-        answers.forEach(a -> System.out.println(a.getText()));
+        var answers = question.answers();
+        answers.forEach(a -> iOServiceStreams.outputString(a.getText()));
     }
 }
