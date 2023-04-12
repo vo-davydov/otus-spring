@@ -4,8 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="iOService" class="ru.otus.service.impl.IOServiceStreams">
+        <constructor-arg index="0" value="#{ T(java.lang.System).out }"/>
+        <constructor-arg index="1" value="#{ T(java.lang.System).in }"/>
+    </bean>
+
     <bean id="gameService" class="ru.otus.service.impl.GameServiceImpl">
         <constructor-arg ref="questionDao"/>
+        <constructor-arg ref="iOService"/>
     </bean>
 
     <bean id="questionDao" class="ru.otus.dao.impl.QuestionDaoCSV">

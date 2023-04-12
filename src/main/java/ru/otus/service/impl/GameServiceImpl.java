@@ -15,9 +15,9 @@ public class GameServiceImpl implements GameService {
 
     private final IOService ioService;
 
-    public GameServiceImpl(QuestionDao questionDao) {
+    public GameServiceImpl(QuestionDao questionDao, IOService ioService) {
         this.questionDao = questionDao;
-        this.ioService = new IOServiceStreams(System.out, System.in);
+        this.ioService = ioService;
     }
 
     @Override

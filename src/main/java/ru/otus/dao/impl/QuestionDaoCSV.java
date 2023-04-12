@@ -15,17 +15,17 @@ public class QuestionDaoCSV implements QuestionDao {
 
     private final static Logger LOGGER = Logger.getLogger(QuestionDaoCSV.class.getName());
 
-    private final String CSV;
+    private final String csv;
 
-    public QuestionDaoCSV(String CSV) {
-        this.CSV = CSV;
+    public QuestionDaoCSV(String csv) {
+        this.csv = csv;
     }
 
     @Override
     public List<Question> getAll() {
         List<Question> questions = new ArrayList<>();
 
-        var resource = FileReader.getRowsByFileName(CSV);
+        var resource = FileReader.getRowsByFileName(csv);
         for (var line : resource) {
             LOGGER.info(String.format("Reading line: %s", line));
             var rows = line.split(";");
