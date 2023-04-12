@@ -14,6 +14,10 @@ public class Answer {
         this.isCorrect = isCorrect;
     }
 
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
     public String getText() {
         return text;
     }
