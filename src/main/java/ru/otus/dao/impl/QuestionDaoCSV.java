@@ -1,6 +1,7 @@
 package ru.otus.dao.impl;
 
 import ru.otus.dao.QuestionDao;
+
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 import ru.otus.exception.LowOrEmptyRowsInfoException;
@@ -29,6 +30,7 @@ public class QuestionDaoCSV implements QuestionDao {
         List<Question> questions = new ArrayList<>();
 
         var resource = getRowsByFile(csv);
+
         for (var line : resource) {
             LOGGER.info(String.format("Reading line: %s", line));
             var rows = line.split(";");
@@ -60,4 +62,5 @@ public class QuestionDaoCSV implements QuestionDao {
     private List<String> getRowsByFile(String fileName) {
         return fileReaderService.getRowsByFileName(csv);
     }
+
 }
