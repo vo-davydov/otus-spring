@@ -1,10 +1,11 @@
 package ru.otus.dao.impl;
 
 import ru.otus.dao.QuestionDao;
-import ru.otus.dao.util.FileReader;
+
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 import ru.otus.exception.LowOrEmptyRowsInfoException;
+import ru.otus.service.FileReaderService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,15 +18,19 @@ public class QuestionDaoCSV implements QuestionDao {
 
     private final String csv;
 
-    public QuestionDaoCSV(String csv) {
+    private final FileReaderService fileReaderService;
+
+    public QuestionDaoCSV(String csv, FileReaderService fileReaderService) {
         this.csv = csv;
+        this.fileReaderService = fileReaderService;
     }
 
     @Override
     public List<Question> getAll() {
         List<Question> questions = new ArrayList<>();
 
-        var resource = FileReader.getRowsByFileName(csv);
+        var resource = getRowsByFile(csv);
+
         for (var line : resource) {
             LOGGER.info(String.format("Reading line: %s", line));
             var rows = line.split(";");
@@ -52,6 +57,10 @@ public class QuestionDaoCSV implements QuestionDao {
             answerList.add(a);
         }
         return new Question(question, answerList);
+    }
+
+    private List<String> getRowsByFile(String fileName) {
+        return fileReaderService.getRowsByFileName(csv);
     }
 
 }

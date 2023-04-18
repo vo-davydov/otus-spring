@@ -15,7 +15,7 @@ class QuestionsReadServiceCSVTest {
 
     @BeforeEach
     public void init() {
-        questionDao = new QuestionDaoCSV(CSV);
+        questionDao = new QuestionDaoCSV(CSV, new FileReaderServiceImpl());
     }
 
     @Test

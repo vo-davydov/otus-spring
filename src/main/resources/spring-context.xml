@@ -14,8 +14,12 @@
         <constructor-arg ref="iOService"/>
     </bean>
 
+    <bean id="fileReaderService" class="ru.otus.service.impl.FileReaderServiceImpl">
+    </bean>
+
     <bean id="questionDao" class="ru.otus.dao.impl.QuestionDaoCSV">
         <constructor-arg value="questions.csv"/>
+        <constructor-arg ref="fileReaderService"/>
     </bean>
 
 </beans>
