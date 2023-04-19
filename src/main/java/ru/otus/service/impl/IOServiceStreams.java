@@ -2,7 +2,6 @@ package ru.otus.service.impl;
 
 import ru.otus.service.IOService;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -18,16 +17,6 @@ public class IOServiceStreams implements IOService {
     public IOServiceStreams(PrintStream outputStream, InputStream inputStream) {
         output = outputStream;
         input = new Scanner(inputStream);
-    }
-
-    public IOServiceStreams(String fileName) {
-        var resource = ClassLoader.getSystemResource(fileName);
-        try {
-            output = new PrintStream(fileName);
-            input = new Scanner(resource.openStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

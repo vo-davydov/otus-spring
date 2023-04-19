@@ -4,32 +4,71 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.otus.Main;
 import ru.otus.dao.QuestionDao;
 import ru.otus.dao.impl.QuestionDaoCSV;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
-@Configuration
+@ContextConfiguration(classes = Main.class)
 @TestPropertySource("classpath:application.properties")
 class QuestionsDaoCSVTest {
 
     private QuestionDao questionDao;
+
+    private final static String FIRST_QUESTION = "What Is a Spring Bean?";
+
+    private final static String SECOND_QUESTION = "Are Singleton Beans Thread-Safe?";
+
+    private final static String THIRD_QUESTION = "What Is the Spring Java-Based Configuration?";
+
+    private final static String FOURTHS_QUESTION = "Can We Have Multiple Spring Configuration Files in One Project?";
+
+    private final static String FIFTH_QUESTION = "How Does the @RequestMapping Annotation Work?";
 
     @Value("${question.file-name}")
     private String csv;
 
     @BeforeEach
     public void init() {
-        questionDao = new QuestionDaoCSV(csv);
+        var fileReaderService = new FileReaderServiceImpl();
+        questionDao = new QuestionDaoCSV(csv, fileReaderService);
     }
 
     @Test
     void fileShouldHaveRightSize() {
         var questions = questionDao.getAll();
         assertEquals(5, questions.size());
+    }
+
+    @Test
+    void readQuestions() {
+        var questions = questionDao.getAll();
+
+        var question1 = questions.get(0);
+        assertNotNull(question1);
+        assertEquals(question1.question(), FIRST_QUESTION);
+
+        var question2 = questions.get(1);
+        assertNotNull(question2);
+        assertEquals(question2.question(), SECOND_QUESTION);
+
+        var question3 = questions.get(2);
+        assertNotNull(question3);
+        assertEquals(question3.question(), THIRD_QUESTION);
+
+        var question4 = questions.get(3);
+        assertNotNull(question4);
+        assertEquals(question4.question(), FOURTHS_QUESTION);
+
+        var question5 = questions.get(4);
+        assertNotNull(question5);
+        assertEquals(question5.question(), FIFTH_QUESTION);
+
     }
 }
