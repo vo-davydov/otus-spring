@@ -1,13 +1,16 @@
 package ru.otus.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.otus.dao.QuestionDao;
 import ru.otus.domain.Question;
 import ru.otus.domain.User;
 import ru.otus.service.GameService;
 import ru.otus.service.IOService;
 
+import java.util.List;
 import java.util.logging.Logger;
 
+@Service
 public class GameServiceImpl implements GameService {
 
     public final static String GREETING_MESSAGE = "Hello";
@@ -34,28 +37,22 @@ public class GameServiceImpl implements GameService {
     @Override
     public void start() {
         ioService.outputString(GREETING_MESSAGE);
-        var name = askName();
-        var lastName = askLastName();
-        var user = new User(name, lastName);
-        var score = 0;
-        var questions = questionDao.getAll();
+        var user = getUser();
+        LOGGER.info(String.format("User: %s", user));
 
+        var questions = questionDao.getAll();
         LOGGER.info(String.format("Questions: %s", questions));
 
-        for (int i = 0; i < questions.size(); i++) {
-            int questionNumber = i + 1;
-            var question = questions.get(i);
-            var msg = String.format("%s questions is: %s", questionNumber, question.question());
-            ioService.outputString(msg);
-            printAnswers(question);
-
-            var userAnswer = askAnswer();
-            if (question.isCorrectAnswer(userAnswer)) {
-                score++;
-            }
-        }
+        var score = getScore(questions);
+        LOGGER.info(String.format("Score is: %s", score));
 
         printScore(user, score);
+    }
+
+    private User getUser() {
+        var name = askName();
+        var lastName = askLastName();
+        return new User(name, lastName);
     }
 
     private String askName() {
@@ -66,13 +63,35 @@ public class GameServiceImpl implements GameService {
         return ioService.readStringWithPrompt(ASK_LASTNAME_MESSAGE);
     }
 
-    private int askAnswer() {
-        return ioService.readIntWithPrompt(ASK_ANSWER);
+    private int getScore(List<Question> questions) {
+        int score = 0;
+
+        for (int i = 0; i < questions.size(); i++) {
+            int questionNumber = i + 1;
+            var question = questions.get(i);
+            askQuestion(questionNumber, question);
+            var userAnswer = askAnswer();
+            if (question.isCorrectAnswer(userAnswer)) {
+                score++;
+            }
+        }
+
+        return score;
+    }
+
+    private void askQuestion(int questionNumber, Question question) {
+        var msg = String.format("%s questions is: %s", questionNumber, question.question());
+        ioService.outputString(msg);
+        printAnswers(question);
     }
 
     private void printAnswers(Question question) {
         var answers = question.answers();
         answers.forEach(a -> ioService.outputString(a.getText()));
+    }
+
+    private int askAnswer() {
+        return ioService.readIntWithPrompt(ASK_ANSWER);
     }
 
     public void printScore(User user, int score) {

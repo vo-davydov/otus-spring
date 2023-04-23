@@ -2,21 +2,12 @@ package ru.otus.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.otus.Main;
 import ru.otus.dao.QuestionDao;
 import ru.otus.dao.impl.QuestionDaoCSV;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = Main.class)
-@TestPropertySource("classpath:application.properties")
 class QuestionsDaoCSVTest {
 
     private QuestionDao questionDao;
@@ -31,13 +22,13 @@ class QuestionsDaoCSVTest {
 
     private final static String FIFTH_QUESTION = "How Does the @RequestMapping Annotation Work?";
 
-    @Value("${question.file-name}")
-    private String csv;
+    private final static String CSV = "questions.csv";
 
     @BeforeEach
     public void init() {
         var fileReaderService = new FileReaderServiceImpl();
-        questionDao = new QuestionDaoCSV(csv, fileReaderService);
+        var rows = fileReaderService.getRowsByFileName(CSV);
+        questionDao = new QuestionDaoCSV(rows);
     }
 
     @Test

@@ -1,13 +1,18 @@
 package ru.otus;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.otus.configuration.CoreConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import ru.otus.service.GameService;
 
+@Configuration
+@ComponentScan
 public class Main {
+
     public static void main(String[] args) {
-        var context = new AnnotationConfigApplicationContext(CoreConfiguration.class);
-        var game = context.getBean("gameService", GameService.class);
+        var context = new AnnotationConfigApplicationContext(Main.class);
+        var game = context.getBean("gameServiceImpl", GameService.class);
         game.start();
     }
+
 }

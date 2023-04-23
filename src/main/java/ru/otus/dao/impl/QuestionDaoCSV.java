@@ -1,36 +1,34 @@
 package ru.otus.dao.impl;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 import ru.otus.dao.QuestionDao;
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 import ru.otus.exception.LowOrEmptyRowsInfoException;
-import ru.otus.service.FileReaderService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+@Repository
 public class QuestionDaoCSV implements QuestionDao {
 
     private final static Logger LOGGER = Logger.getLogger(QuestionDaoCSV.class.getName());
 
-    private final String csv;
+    @Value("{T(ru.otus.service.FileReaderService).getRowsByFileName(${question.file-name})")
+    private final List<String> rowsFromCSV;
 
-    private final FileReaderService fileReaderService;
-
-    public QuestionDaoCSV(String csv, FileReaderService fileReaderService) {
-        this.csv = csv;
-        this.fileReaderService = fileReaderService;
+    public QuestionDaoCSV(List<String> rowsFromCSV) {
+        this.rowsFromCSV = rowsFromCSV;
     }
 
     @Override
     public List<Question> getAll() {
         List<Question> questions = new ArrayList<>();
 
-        var resource = getRows();
-
-        for (var line : resource) {
+        for (var line : rowsFromCSV) {
             LOGGER.info(String.format("Reading line: %s", line));
             var rows = line.split(";");
             var question = creatQuestionByRows(rows);
@@ -58,7 +56,4 @@ public class QuestionDaoCSV implements QuestionDao {
         return new Question(question, answerList);
     }
 
-    private List<String> getRows() {
-        return fileReaderService.getRowsByFileName(csv);
-    }
 }
