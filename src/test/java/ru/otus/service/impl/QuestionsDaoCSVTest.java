@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.otus.dao.QuestionDao;
 import ru.otus.dao.impl.QuestionDaoCSV;
+import ru.otus.util.FileReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,9 +27,8 @@ class QuestionsDaoCSVTest {
 
     @BeforeEach
     public void init() {
-        var fileReaderService = new FileReaderServiceImpl();
-        var rows = fileReaderService.getRowsByFileName(CSV);
-        questionDao = new QuestionDaoCSV(rows);
+        var fileReader = new FileReader();
+        questionDao = new QuestionDaoCSV(CSV, fileReader);
     }
 
     @Test

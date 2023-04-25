@@ -6,6 +6,7 @@ import ru.otus.dao.QuestionDao;
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 import ru.otus.exception.LowOrEmptyRowsInfoException;
+import ru.otus.util.FileReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,16 +18,19 @@ public class QuestionDaoCSV implements QuestionDao {
 
     private final static Logger LOGGER = Logger.getLogger(QuestionDaoCSV.class.getName());
 
-    @Value("{T(ru.otus.service.FileReaderService).getRowsByFileName(${question.file-name})")
-    private final List<String> rowsFromCSV;
+    private final String fileName;
 
-    public QuestionDaoCSV(List<String> rowsFromCSV) {
-        this.rowsFromCSV = rowsFromCSV;
+    private final FileReader fileReader;
+
+    public QuestionDaoCSV(String fileName, FileReader fileReader) {
+        this.fileName = fileName;
+        this.fileReader = fileReader;
     }
 
     @Override
     public List<Question> getAll() {
         List<Question> questions = new ArrayList<>();
+        var rowsFromCSV = getRowsFromCsv();
 
         for (var line : rowsFromCSV) {
             LOGGER.info(String.format("Reading line: %s", line));
@@ -56,4 +60,7 @@ public class QuestionDaoCSV implements QuestionDao {
         return new Question(question, answerList);
     }
 
+    private List<String> getRowsFromCsv() {
+        return fileReader.getRowsByFileName(fileName);
+    }
 }

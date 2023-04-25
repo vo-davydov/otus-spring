@@ -1,8 +1,7 @@
-package ru.otus.service.impl;
+package ru.otus.util;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.otus.exception.FileCannotBeReadException;
-import ru.otus.service.FileReaderService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-@Service
-public class FileReaderServiceImpl implements FileReaderService {
+@Component
+public class FileReader {
 
-    @Override
     public List<String> getRowsByFileName(String fileName) {
         var resource = getURL(fileName);
 
