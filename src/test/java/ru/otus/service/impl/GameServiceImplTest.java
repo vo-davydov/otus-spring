@@ -2,10 +2,9 @@ package ru.otus.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.otus.core.MessageSourceHelper;
 import ru.otus.dao.QuestionDao;
 import ru.otus.domain.Answer;
@@ -19,9 +18,9 @@ import java.util.Arrays;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ru.otus.service.impl.GameServiceImpl.*;
+import static ru.otus.core.GameMessages.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class GameServiceImplTest {
     @Mock
     private QuestionDao questionDao;

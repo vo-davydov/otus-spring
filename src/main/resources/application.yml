@@ -3,7 +3,8 @@ spring:
     basename: "i18n/appmessages"
     encoding: "UTF-8"
 
-question:
-  file-name: questions_ru.csv
 application:
   locale: ru_RU
+  question:
+    filename: questions_ru.csv
+

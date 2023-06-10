@@ -1,11 +1,12 @@
 package ru.otus.dao.impl;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.otus.dao.QuestionDao;
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 import ru.otus.exception.LowOrEmptyRowsInfoException;
+import ru.otus.provider.FileNameProvider;
 import ru.otus.util.FileReader;
 
 import java.util.ArrayList;
@@ -14,18 +15,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Repository
+@AllArgsConstructor
 public class QuestionDaoCSV implements QuestionDao {
 
     private final static Logger LOGGER = Logger.getLogger(QuestionDaoCSV.class.getName());
 
-    private final String fileName;
+    private final FileNameProvider fileNameProvider;
 
     private final FileReader fileReader;
-
-    public QuestionDaoCSV(@Value("${question.file-name}") String fileName, FileReader fileReader) {
-        this.fileName = fileName;
-        this.fileReader = fileReader;
-    }
 
     @Override
     public List<Question> getAll() {
@@ -61,6 +58,7 @@ public class QuestionDaoCSV implements QuestionDao {
     }
 
     private List<String> getRowsFromCsv() {
+        var fileName = fileNameProvider.getQuestionFileNameByCurrentLocale();
         return fileReader.getRowsByFileName(fileName);
     }
 }

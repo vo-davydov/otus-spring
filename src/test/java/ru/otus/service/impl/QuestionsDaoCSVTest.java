@@ -2,8 +2,13 @@ package ru.otus.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.otus.configuration.CoreProperty;
 import ru.otus.dao.QuestionDao;
 import ru.otus.dao.impl.QuestionDaoCSV;
+import ru.otus.provider.FileNameProvider;
+import ru.otus.provider.LocaleProvider;
+import ru.otus.provider.impl.FileNameProviderImpl;
+import ru.otus.provider.impl.LocaleProviderImpl;
 import ru.otus.util.FileReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,12 +28,19 @@ public class QuestionsDaoCSVTest {
 
     private final static String FIFTH_QUESTION = "How Does the @RequestMapping Annotation Work?";
 
-    private final static String CSV = "questions_en.csv";
+    private FileNameProvider fileNameProvider;
+
+    private CoreProperty coreProperty;
+
+    private LocaleProvider localeProvider;
 
     @BeforeEach
     public void init() {
         var fileReader = new FileReader();
-        questionDao = new QuestionDaoCSV(CSV, fileReader);
+        this.coreProperty = new CoreProperty();
+        this.localeProvider = new LocaleProviderImpl(coreProperty);
+        this.fileNameProvider = new FileNameProviderImpl(localeProvider, coreProperty);
+        questionDao = new QuestionDaoCSV(fileNameProvider, fileReader);
     }
 
     @Test

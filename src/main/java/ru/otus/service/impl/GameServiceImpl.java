@@ -12,21 +12,16 @@ import ru.otus.service.IOService;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static ru.otus.core.GameMessages.ASK_NAME_CODE;
+import static ru.otus.core.GameMessages.GREETING_CODE;
+import static ru.otus.core.GameMessages.ASK_LASTNAME_CODE;
+import static ru.otus.core.GameMessages.ASK_QUESTION_CODE;
+import static ru.otus.core.GameMessages.ASK_ANSWER_CODE;
+import static ru.otus.core.GameMessages.SCORE_CODE;
+
 @Service
 @AllArgsConstructor
 public class GameServiceImpl implements GameService {
-
-    public final static String GREETING_CODE = "game.greeting";
-
-    public final static String ASK_NAME_CODE = "game.ask.name";
-
-    public final static String ASK_LASTNAME_CODE = "game.ask.lastname";
-
-    public final static String ASK_ANSWER_CODE = "game.ask.answer";
-
-    public final static String SCORE_CODE = "game.score";
-
-    public final static String ASK_QUESTION_CODE = "game.ask.question";
 
     private final static Logger LOGGER = Logger.getLogger(GameServiceImpl.class.getName());
 
@@ -96,7 +91,7 @@ public class GameServiceImpl implements GameService {
         return ioService.readIntWithPrompt(messageSourceHelper.getMessage(ASK_ANSWER_CODE));
     }
 
-    public void printScore(User user, int score) {
+    private void printScore(User user, int score) {
         ioService.outputString(messageSourceHelper.getMessage(SCORE_CODE, user.name(), score));
     }
 
