@@ -6,8 +6,9 @@ spring:
     interactive:
       enabled: false
 
-question:
-  file-name: questions_ru.csv
+
 application:
-  locale: ru_RU
+  locale: en_US
+  question:
+    file-name: questions_en.csv
 

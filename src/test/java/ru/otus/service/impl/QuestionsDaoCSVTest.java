@@ -11,6 +11,8 @@ import ru.otus.provider.impl.FileNameProviderImpl;
 import ru.otus.provider.impl.LocaleProviderImpl;
 import ru.otus.util.FileReader;
 
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -38,6 +40,7 @@ public class QuestionsDaoCSVTest {
     public void init() {
         var fileReader = new FileReader();
         this.coreProperty = new CoreProperty();
+        this.coreProperty.setLocale(new Locale("en"));
         this.localeProvider = new LocaleProviderImpl(coreProperty);
         this.fileNameProvider = new FileNameProviderImpl(localeProvider, coreProperty);
         questionDao = new QuestionDaoCSV(fileNameProvider, fileReader);
