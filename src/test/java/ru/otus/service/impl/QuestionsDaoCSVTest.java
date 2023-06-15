@@ -2,6 +2,7 @@ package ru.otus.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.otus.configuration.CoreProperty;
 import ru.otus.dao.QuestionDao;
 import ru.otus.dao.impl.QuestionDaoCSV;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest
 public class QuestionsDaoCSVTest {
 
     private QuestionDao questionDao;
