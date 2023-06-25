@@ -1,0 +1,5 @@
+What Is a Spring Bean?;The Spring Beans are Java Objects that are initialized by the Spring IoC container.;Wrong answer;0
+Are Singleton Beans Thread-Safe?;Wrong answer;No, singleton beans are not thread-safe, as thread safety is about execution, whereas the singleton is a design pattern focusing on creation. Thread safety depends only on the bean implementation itself.;1
+What Is the Spring Java-Based Configuration?;It's one of the ways of configuring Spring-based applications in a type-safe manner. It's an alternative to the XML-based configuration.;Wrong answer;0
+Can We Have Multiple Spring Configuration Files in One Project?;Yes;No;0
+How Does the @RequestMapping Annotation Work?;The @RequestMapping annotation is used to map web requests to Spring Controller methods. In addition to simple use cases, we can use it for mapping of HTTP headers, binding parts of the URI with @PathVariable, and working with URI parameters and the @RequestParam annotation.;Wrong answer;0
