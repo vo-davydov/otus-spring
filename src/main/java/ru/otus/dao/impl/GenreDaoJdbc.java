@@ -9,7 +9,6 @@ import ru.otus.domain.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -19,14 +18,9 @@ public class GenreDaoJdbc implements GenreDao {
     private final NamedParameterJdbcOperations jdbc;
 
     @Override
-    public Integer count() {
-        return jdbc.queryForObject("select count(*) from genre", Map.of(), Integer.class);
-    }
-
-    @Override
     public void insert(Genre genre) {
-        jdbc.update("insert into genre (id, name) values (:id, :name)",
-                Map.of("id", genre.getId(), "name", genre.getName()));
+        jdbc.update("insert into genre (name) values (:name)",
+                Map.of("name", genre.getName()));
     }
 
     @Override
@@ -35,10 +29,6 @@ public class GenreDaoJdbc implements GenreDao {
                 Map.of("id", id), new GenreMapper());
     }
 
-    @Override
-    public List<Genre> getAll() {
-        return jdbc.query("select * from genre", new GenreMapper());
-    }
 
     public Genre getByName(String name) {
         return jdbc.queryForObject("select id, name from genre where UPPER(name) LIKE UPPER(:name)",

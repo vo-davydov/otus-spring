@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
 import ru.otus.dao.GenreDao;
+import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.dto.BookDto;
+import ru.otus.exception.AmbiguousAuthorException;
+import ru.otus.exception.AuthorNotFoundException;
 import ru.otus.service.BookService;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void saveBook(BookDto bookDto) {
         var genre = genreDao.getByName(bookDto.getGenreName());
-        var author = authorDao.getByName(bookDto.getAuthorName());
+        var author = getAuthor(bookDto);
         var book = new Book(bookDto.getId(), bookDto.getName(), author, genre);
         bookDao.insert(book);
     }
@@ -32,7 +35,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateBook(BookDto bookDto) {
         var genre = genreDao.getByName(bookDto.getGenreName());
-        var author = authorDao.getByName(bookDto.getAuthorName());
+        var author = getAuthor(bookDto);
         var book = new Book(bookDto.getId(), bookDto.getName(), author, genre);
         bookDao.update(book);
     }
@@ -59,5 +62,22 @@ public class BookServiceImpl implements BookService {
 
     public List<Book> getBooksByAuthor(String name) {
         return bookDao.getBooksByAuthor(name);
+    }
+
+    private Author getAuthor(BookDto bookDto) {
+        Author author;
+        if (bookDto.getAuthorId() != null) {
+            author = authorDao.getById(bookDto.getAuthorId());
+        } else {
+            var authors = authorDao.getByName(bookDto.getAuthorName());
+            if (authors.size() > 1) {
+                throw new AmbiguousAuthorException();
+            } else if (authors.get(0) == null) {
+                throw new AuthorNotFoundException();
+            }
+            author = authors.get(0);
+        }
+
+        return author;
     }
 }

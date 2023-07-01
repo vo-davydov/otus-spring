@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.dao.BookDao;
@@ -15,7 +14,8 @@ import ru.otus.domain.Genre;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Dao для работы с книгами должно")
 @JdbcTest
@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookDaoJdbcTest {
 
     private static final int EXPECTED_BOOK_COUNT = 1;
+
+    private static final long EXPECTED_BOOK_ID = 2L;
 
     private static final long EXISTING_BOOK_ID = 1L;
 
@@ -48,10 +50,10 @@ class BookDaoJdbcTest {
 
     @Test
     void shouldInsertBook() {
-        Book expectedBook = new Book(6L, "Hearts of Three", new Author(1L, "Jack London"),
+        Book expectedBook = new Book(EXPECTED_BOOK_ID, "Hearts of Three", new Author(1L, "Jack London"),
                 new Genre(3L, "adventures"));
         bookDaoJdbc.insert(expectedBook);
-        Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
+        Book actualBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 

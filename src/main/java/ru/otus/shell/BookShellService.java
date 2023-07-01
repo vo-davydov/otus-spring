@@ -21,6 +21,12 @@ public class BookShellService {
         bookService.saveBook(bookDto);
     }
 
+    @ShellMethod(value = "Save book by author id", key = {"si", "save by id"})
+    public void saveBook(String name, Long authorId, String genreName) {
+        var bookDto = new BookDto(name, authorId, genreName);
+        bookService.saveBook(bookDto);
+    }
+
     @ShellMethod(value = "Update book", key = {"u", "update"})
     public void updateBook(Long id, String name, String authorName, String genreName) {
         var bookDto = new BookDto(id, name, authorName, genreName);
