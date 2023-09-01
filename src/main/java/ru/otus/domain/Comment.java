@@ -8,23 +8,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@RequiredArgsConstructor
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "genre")
-public class Genre {
+@Table(name = "comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column
+    private String text;
 
-    public Genre(String name) {
-        this.name = name;
+    @Column(name = "book_id")
+    private Long bookId;
+
+    public Comment(Long bookId, String text) {
+        this.text = text;
+        this.bookId = bookId;
     }
 }
