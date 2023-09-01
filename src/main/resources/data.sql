@@ -24,3 +24,8 @@ insert into book (NAME, author_id, genre_id)
 values ('12 Rules for Life', 2, 1);
 insert into book (NAME, author_id, genre_id)
 values ('12 More Rules for Life', 2, 1);
+
+insert into COMMENT (TEXT, BOOK_ID)
+values ('OMG the best book', 1);
+insert into COMMENT (TEXT, BOOK_ID)
+values ('better not read at all', 2);
