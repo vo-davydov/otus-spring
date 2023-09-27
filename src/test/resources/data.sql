@@ -1,16 +1,22 @@
 insert into AUTHOR (NAME)
-values ('Jack London');
+values ('Stephen king');
 insert into AUTHOR (NAME)
-values ('Jordan Peterson');
+values ('Nassim Taleb');
 insert into AUTHOR (NAME)
-values ('Daniel Kahneman');
+values ('Robert Martin');
 
 insert into GENRE (NAME)
-values ('psychology');
+values ('horror');
 insert into GENRE (NAME)
-values ('economy');
+values ('non fiction');
 insert into GENRE (NAME)
-values ('adventures');
+values ('programming');
 
 insert into book (NAME, author_id, genre_id)
-values ('White Fang', 1, 3);
+values ('IT', 1, 1);
+
+insert into book (NAME, author_id, genre_id)
+values ('The Black Swan: The Impact of the Highly Improbable', 2, 2);
+
+insert into book (NAME, author_id, genre_id)
+values ('Clean Code: A Handbook of Agile Software Craftsmanship', 3, 3);

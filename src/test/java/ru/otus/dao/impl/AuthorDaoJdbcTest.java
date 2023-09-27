@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.domain.Author;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Dao для работы с авторами должно")
@@ -17,9 +17,7 @@ class AuthorDaoJdbcTest {
 
     private static final long EXISTING_AUTHOR_ID = 1L;
 
-    private static final long EXPECTED_AUTHOR_ID = 4L;
-
-    private static final String EXISTING_AUTHOR_NAME = "Jack London";
+    private static final String EXISTING_AUTHOR_NAME = "Stephen king";
 
     @Autowired
     private AuthorDaoJdbc authorDaoJdbc;
@@ -28,8 +26,8 @@ class AuthorDaoJdbcTest {
     void shouldInsertAuthor() {
         Author expectedAuthor = new Author("Igor");
         authorDaoJdbc.insert(expectedAuthor);
-        expectedAuthor.setId(EXPECTED_AUTHOR_ID);
-        Author actualAuthor = authorDaoJdbc.getById(EXPECTED_AUTHOR_ID);
+        expectedAuthor.setId(4L);
+        Author actualAuthor = authorDaoJdbc.getById(4L);
         assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }
 

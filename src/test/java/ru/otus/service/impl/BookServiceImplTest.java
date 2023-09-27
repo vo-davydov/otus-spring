@@ -55,7 +55,6 @@ class BookServiceImplTest {
     void shouldSaveBook() {
         var bookDto = new BookDto(6L, "Hearts of Three", "Jack London", "adventures");
 
-        when(genreDao.getById(3L)).thenReturn(expectedGenre);
         when(authorDao.getByName("Jack London")).thenReturn(List.of(expectedAuthor));
 
         assertThatCode(() -> bookService.saveBook(bookDto))
@@ -67,7 +66,6 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         var bookDto = new BookDto(6L, "Hearts of Three", "Jack London", "adventures");
 
-        when(genreDao.getById(3L)).thenReturn(expectedGenre);
         when(authorDao.getByName("Jack London")).thenReturn(List.of(expectedAuthor));
 
         assertThatCode(() -> bookService.updateBook(bookDto))

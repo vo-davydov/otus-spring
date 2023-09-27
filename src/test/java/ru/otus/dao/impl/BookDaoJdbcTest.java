@@ -22,21 +22,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Import(BookDaoJdbc.class)
 class BookDaoJdbcTest {
 
-    private static final int EXPECTED_BOOK_COUNT = 1;
+    private static final int EXPECTED_BOOK_COUNT = 3;
 
-    private static final long EXPECTED_BOOK_ID = 2L;
+    private static final long EXPECTED_BOOK_ID = 4L;
 
     private static final long EXISTING_BOOK_ID = 1L;
 
-    private static final String EXISTING_BOOK_NAME = "White Fang";
+    private static final String EXISTING_BOOK_NAME = "IT";
 
     private static final long EXISTING_AUTHOR_ID = 1L;
 
-    private static final String EXISTING_AUTHOR_NAME = "Jack London";
+    private static final String EXISTING_AUTHOR_NAME = "Stephen king";
 
-    private static final long EXISTING_GENRE_ID = 3L;
+    private static final long EXISTING_GENRE_ID = 1L;
 
-    private static final String EXISTING_GENRE_NAME = "adventures";
+    private static final String EXISTING_GENRE_NAME = "horror";
 
     @Autowired
     private BookDao bookDaoJdbc;
@@ -50,20 +50,20 @@ class BookDaoJdbcTest {
 
     @Test
     void shouldInsertBook() {
-        Book expectedBook = new Book(EXPECTED_BOOK_ID, "Hearts of Three", new Author(1L, "Jack London"),
-                new Genre(3L, "adventures"));
+        Book expectedBook = new Book(4L, "The Dark Tower", new Author(1L, "Stephen king"),
+                new Genre(1L, "horror"));
         bookDaoJdbc.insert(expectedBook);
         Book actualBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
-        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
+        assertThat(expectedBook).usingRecursiveComparison().isEqualTo(actualBook);
     }
 
     @Test
     void shouldUpdateBook() {
-        Book expectedBook = new Book(1L, "Hearts of Three", new Author(1L, "Jack London"),
-                new Genre(3L, "adventures"));
+        Book expectedBook = new Book(1L, "The Dark Tower", new Author(1L, "Stephen king"),
+                new Genre(1L, "horror"));
         bookDaoJdbc.update(expectedBook);
         Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
-        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
+        assertThat(expectedBook).usingRecursiveComparison().isEqualTo(actualBook);
     }
 
     @Test
@@ -82,9 +82,15 @@ class BookDaoJdbcTest {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_BOOK_NAME,
                 new Author(EXISTING_AUTHOR_ID, EXISTING_AUTHOR_NAME), new Genre(EXISTING_GENRE_ID, EXISTING_GENRE_NAME));
 
+        Book expectedBook2 = new Book(2L, "The Black Swan: The Impact of the Highly Improbable",
+                new Author(2L, "Nassim Taleb"), new Genre(2L, "non fiction"));
+
+        Book expectedBook3 = new Book(3L, "Clean Code: A Handbook of Agile Software Craftsmanship",
+                new Author(3L, "Robert Martin"), new Genre(3L, "programming"));
+
         List<Book> actualPersonList = bookDaoJdbc.getAll();
         assertThat(actualPersonList)
-                .containsExactlyInAnyOrder(expectedBook);
+                .containsExactlyInAnyOrder(expectedBook, expectedBook2, expectedBook3);
     }
 
     @Test

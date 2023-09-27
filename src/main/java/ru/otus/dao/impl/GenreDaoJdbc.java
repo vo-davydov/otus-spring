@@ -23,13 +23,6 @@ public class GenreDaoJdbc implements GenreDao {
                 Map.of("name", genre.getName()));
     }
 
-    @Override
-    public Genre getById(long id) {
-        return jdbc.queryForObject("select id, name from genre where id = :id",
-                Map.of("id", id), new GenreMapper());
-    }
-
-
     public Genre getByName(String name) {
         return jdbc.queryForObject("select id, name from genre where UPPER(name) LIKE UPPER(:name)",
                 Map.of("name", name), new GenreMapper());

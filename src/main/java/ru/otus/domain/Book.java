@@ -17,6 +17,12 @@ public class Book {
 
     private Genre genre;
 
+    public Book(String name, Author author, Genre genre) {
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+    }
+
     public Long getAuthorId() {
         if (author != null) {
             return author.getId();
