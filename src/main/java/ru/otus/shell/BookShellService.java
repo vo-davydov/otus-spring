@@ -6,14 +6,15 @@ import org.springframework.shell.standard.ShellMethod;
 import ru.otus.domain.Book;
 import ru.otus.dto.BookDto;
 import ru.otus.service.BookService;
-
-import java.util.List;
+import ru.otus.service.PrintService;
 
 @ShellComponent
 @RequiredArgsConstructor
 public class BookShellService {
 
     private final BookService bookService;
+
+    private final PrintService<Book> printService;
 
     @ShellMethod(value = "Save book", key = {"s", "save"})
     public void saveBook(String name, String authorName, String genreName) {
@@ -34,13 +35,15 @@ public class BookShellService {
     }
 
     @ShellMethod(value = "Get by id book", key = {"g", "get"})
-    public Book getBookById(Long id) {
-        return bookService.getBookById(id);
+    public void getBookById(Long id) {
+        var book = bookService.getBookById(id);
+        printService.print(book);
     }
 
     @ShellMethod(value = "Get books by author", key = {"gb", "get by author"})
-    public List<Book> getBooksByAuthor(String name) {
-        return bookService.getBooksByAuthor(name);
+    public void getBooksByAuthor(String name) {
+        var books = bookService.getBooksByAuthor(name);
+        books.forEach(printService::print);
     }
 
     @ShellMethod(value = "Delete book", key = {"d", "delete"})
@@ -49,8 +52,9 @@ public class BookShellService {
     }
 
     @ShellMethod(value = "Get all books", key = {"ga", "get all"})
-    public List<Book> getBooks() {
-        return bookService.getBooks();
+    public void getBooks() {
+        var books = bookService.getBooks();
+        books.forEach(printService::print);
     }
 
     @ShellMethod(value = "Count books", key = {"c", "count"})

@@ -80,9 +80,9 @@ public class BookDaoJdbc implements BookDao {
                 "       g.name as genre_name, " +
                 "       a.id as author_id, " +
                 "       a.name as author_name " +
-                "from book b " +
-                "         left outer join genre g ON g.id = b.genre_id " +
-                "         left outer join author a on a.id = b.author_id " +
+                "from author a " +
+                "         inner join book b ON a.id = b.author_id " +
+                "         left outer join genre g ON b.genre_id = g.id " +
                 "where UPPER(a.name) like UPPER(:name)", Map.of("name", name), new BookMapper());
     }
 
