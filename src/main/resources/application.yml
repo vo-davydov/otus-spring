@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/book
+    username: book_user
+    password: book_password
+  sql:
+    init:
+      mode: always
+      data-locations: data.sql
+      schema-locations: schema.sql
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: TRACE
