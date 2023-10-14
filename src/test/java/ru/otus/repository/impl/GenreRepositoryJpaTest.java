@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.domain.Genre;
 import ru.otus.repository.GenreRepository;
 
@@ -14,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Jpa-based repository for working with genre")
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
 class GenreRepositoryJpaTest {
 
     @Autowired

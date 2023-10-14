@@ -7,18 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.domain.Author;
+import ru.otus.repository.AuthorRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Jpa-based repository for working with authors")
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
 public class AuthorRepositoryJpaTest {
 
     @Autowired
-    private AuthorRepositoryJpa repositoryJpa;
+    private AuthorRepository repository;
 
     @Autowired
     private TestEntityManager em;
@@ -29,7 +28,7 @@ public class AuthorRepositoryJpaTest {
     @Test
     public void shouldSaveAuthor() {
         var expectedAuthor = new Author("Igor");
-        repositoryJpa.save(expectedAuthor);
+        repository.save(expectedAuthor);
         var actualAuthor = em.find(Author.class, expectedAuthor.getId());
         Assertions.assertNotNull(actualAuthor);
         assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
@@ -53,7 +52,7 @@ public class AuthorRepositoryJpaTest {
         sessionFactory.getStatistics().setStatisticsEnabled(true);
 
         var expectedAuthor = new Author(3L, "Robert Martin");
-        var actualAuthors = repositoryJpa.findByName("Robert Martin");
+        var actualAuthors = repository.findByNameIgnoreCase("Robert Martin");
         Assertions.assertEquals(1, actualAuthors.size());
         Assertions.assertEquals(expectedAuthor, actualAuthors.get(0));
         assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);

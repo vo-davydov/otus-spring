@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.domain.Comment;
+import ru.otus.exception.BookNotFoundException;
 import ru.otus.repository.BookRepository;
 import ru.otus.repository.CommentRepository;
 import ru.otus.service.CommentService;
@@ -52,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Comment saveByBookId(Long bookId, String text) {
-        var book = bookRepository.findById(bookId);
+        var book = bookRepository.findByIdLazy(bookId).orElseThrow(BookNotFoundException::new);
         var comment = new Comment(book, text);
         return commentRepository.save(comment);
     }
@@ -72,7 +73,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteComment(Long commentId) {
-        commentRepository.delete(commentId);
+        commentRepository.deleteById(commentId);
     }
 
 }

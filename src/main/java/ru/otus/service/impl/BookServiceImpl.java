@@ -8,6 +8,7 @@ import ru.otus.domain.Book;
 import ru.otus.dto.BookDto;
 import ru.otus.exception.AmbiguousAuthorException;
 import ru.otus.exception.AuthorNotFoundException;
+import ru.otus.exception.BookNotFoundException;
 import ru.otus.repository.AuthorRepository;
 import ru.otus.repository.BookRepository;
 import ru.otus.repository.GenreRepository;
@@ -38,13 +39,13 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Book getBookById(Long id) {
-        return bookRepository.findById(id);
+        return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
     @Transactional
     @Override
     public void deleteBookById(Long id) {
-        bookRepository.delete(id);
+        bookRepository.deleteById(id);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     public List<Book> getBooksByAuthor(String name) {
-        return bookRepository.findBooksByAuthor(name);
+        return bookRepository.findBooksByAuthorName(name);
     }
 
     private Optional<Author> getAuthor(BookDto bookDto) {
@@ -63,10 +64,10 @@ public class BookServiceImpl implements BookService {
         if (bookDto.getAuthorId() != null) {
             author = authorRepository.findById(bookDto.getAuthorId());
         } else {
-            var authors = authorRepository.findByName(bookDto.getAuthorName());
+            var authors = authorRepository.findByNameIgnoreCase(bookDto.getAuthorName());
             if (authors.size() > 1) {
                 throw new AmbiguousAuthorException();
-            } else if (authors.get(0) == null) {
+            } else if (authors.size() == 0 || authors.get(0) == null) {
                 throw new AuthorNotFoundException();
             }
             author = Optional.of(authors.get(0));

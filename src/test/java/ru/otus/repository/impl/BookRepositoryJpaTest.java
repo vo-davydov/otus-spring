@@ -7,10 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
+import ru.otus.exception.BookNotFoundException;
+import ru.otus.repository.BookRepository;
 
 import java.util.List;
 
@@ -21,11 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Jpa-based repository for working with book")
 @DataJpaTest
-@Import(BookRepositoryJpa.class)
 class BookRepositoryJpaTest {
 
     @Autowired
-    private BookRepositoryJpa repositoryJpa;
+    private BookRepository repository;
 
     @Autowired
     private TestEntityManager em;
@@ -38,7 +38,7 @@ class BookRepositoryJpaTest {
     void save() {
         Book actualBook = new Book("Hearts of Three", null,
                 null);
-        repositoryJpa.save(actualBook);
+        repository.save(actualBook);
         var expectedBook = em.find(Book.class, EXPECTED_BOOK_ID);
         assertNotNull(expectedBook);
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
@@ -47,7 +47,7 @@ class BookRepositoryJpaTest {
     @Test
     void findById() {
         Book expectedBook = em.find(Book.class, 1L);
-        var actualBook = repositoryJpa.findById(1L);
+        var actualBook = repository.findById(1L).orElseThrow(BookNotFoundException::new);
         unproxyFields(actualBook);
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
@@ -64,7 +64,7 @@ class BookRepositoryJpaTest {
         Book thirdExpectedBook = new Book(3L, "Clean Code: A Handbook of Agile Software Craftsmanship",
                 new Author(3L, "Robert Martin"), new Genre(3L, "programming"));
         var expectedBooks = List.of(firstExpectedBook, secondExpectedBook, thirdExpectedBook);
-        var actualBooks = repositoryJpa.findAll();
+        var actualBooks = repository.findAll();
         actualBooks.forEach(this::unproxyFields);
         assertThat(actualBooks).usingRecursiveComparison().isEqualTo(expectedBooks);
         assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);
@@ -72,14 +72,14 @@ class BookRepositoryJpaTest {
 
     @Test
     void delete() {
-        assertThatCode(() -> repositoryJpa.delete(1L))
+        assertThatCode(() -> repository.deleteById(1L))
                 .doesNotThrowAnyException();
     }
 
     @Test
     void findBooksByAuthor() {
         Book expectedBook = em.find(Book.class, 1L);
-        var books = repositoryJpa.findBooksByAuthor("Stephen king");
+        var books = repository.findBooksByAuthorName("Stephen king");
         assertEquals(1, books.size());
         assertNotNull(books.get(0));
         var actualBook = books.get(0);
@@ -90,7 +90,7 @@ class BookRepositoryJpaTest {
     @Test
     void findBooksByName() {
         Book expectedBook = em.find(Book.class, 1L);
-        var books = repositoryJpa.findBooksByName("IT");
+        var books = repository.findBooksByName("IT");
         assertEquals(1, books.size());
         assertNotNull(books.get(0));
         var actualBook = books.get(0);

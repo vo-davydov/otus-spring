@@ -58,7 +58,7 @@ class BookServiceImplTest {
         var bookDto = new BookDto(4L, "The Dark Tower", "Stephen king", "horror");
 
         when(genreRepository.findById(1L)).thenReturn(Optional.of(expectedGenre));
-        when(authorRepository.findByName("Stephen king")).thenReturn(List.of(expectedAuthor));
+        when(authorRepository.findByNameIgnoreCase("Stephen king")).thenReturn(List.of(expectedAuthor));
 
         assertThatCode(() -> bookService.saveBook(bookDto))
                 .doesNotThrowAnyException();
@@ -67,7 +67,7 @@ class BookServiceImplTest {
 
     @Test
     void getBookById() {
-        when(bookRepository.findById(1L)).thenReturn(expectedBook);
+        when(bookRepository.findById(1L)).thenReturn(Optional.ofNullable(expectedBook));
         var actualBook = bookService.getBookById(1L);
         assertNotNull(actualBook);
         assertEquals(actualBook, expectedBook);
