@@ -1,12 +1,17 @@
 package ru.otus.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import ru.otus.domain.Author;
 
 import java.util.List;
 
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+@Repository
+public interface AuthorRepository extends ReactiveMongoRepository<Author, String> {
 
-    List<Author> findByNameIgnoreCase(String name);
+    @Query("{ 'name' : ?0 }")
+    Flux<Author> findAuthorByName(String name);
 
 }

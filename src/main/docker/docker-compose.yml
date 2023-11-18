@@ -1,9 +1,20 @@
+version: '3'
 services:
-  db:
-    image: postgres:13.1-alpine
-    environment:
-      POSTGRES_DB: book
-      POSTGRES_USER: book_user
-      POSTGRES_PASSWORD: book_password
+  mongodb:
+    image: mongo
+    container_name: mongodb
     ports:
-      - 5435:5432
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+    restart: always
+
+  mongodb-setup:
+    image: mongo
+    container_name: mongodb-setup
+    command: >
+      bash -c "sleep 10 && mongo mongodb://mongodb:27017/db-setup /setup.js"
+    volumes:
+      - ./setup.js:/setup.js
+    depends_on:
+      - mongodb

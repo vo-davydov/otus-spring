@@ -1,16 +1,16 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5435/book
-    username: book_user
-    password: book_password
-  sql:
-    init:
-      mode: always
-  jpa:
-    show-sql: true
-logging:
-  level:
-    org:
-      springframework:
-        jdbc:
-          core: TRACE
+  data:
+    mongodb:
+      port: 27017
+      database: book
+
+#mongock:
+#  enabled: on
+#  change-logs-scan-package:
+#    - ru.otus.changelog
+#  runner-type: "ApplicationRunner" # default
+#  #runner-type: "InitializingBean"
+#  mongo-db:
+#    write-concern:
+#      journal: false
+#    read-concern: local
