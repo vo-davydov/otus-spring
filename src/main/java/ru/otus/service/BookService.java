@@ -10,7 +10,7 @@ public interface BookService {
 
     Mono<Book> getBookById(String id);
 
-    void deleteBookById(String id);
+    Mono<Void> deleteBookById(String id);
 
     Flux<Book> getBooks();
 

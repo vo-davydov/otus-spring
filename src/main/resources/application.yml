@@ -2,15 +2,7 @@ spring:
   data:
     mongodb:
       port: 27017
-      database: book
-
-#mongock:
-#  enabled: on
-#  change-logs-scan-package:
-#    - ru.otus.changelog
-#  runner-type: "ApplicationRunner" # default
-#  #runner-type: "InitializingBean"
-#  mongo-db:
-#    write-concern:
-#      journal: false
-#    read-concern: local
+      database: dbbook
+core:
+  migration-packages:
+    - ru.otus.changelog

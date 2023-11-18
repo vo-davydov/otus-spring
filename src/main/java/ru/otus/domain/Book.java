@@ -1,7 +1,10 @@
 package ru.otus.domain;
 
-import org.springframework.data.annotation.Id;
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,13 +12,17 @@ import java.util.Objects;
 @Document(collection = "book")
 public class Book implements Serializable {
 
-    @Id
+    @BsonId
+    @BsonRepresentation(value = BsonType.OBJECT_ID)
     private String id;
 
+    @Field
     private String name;
 
+    @Field
     private Author author;
 
+    @Field
     private Genre genre;
 
     public Book() {
