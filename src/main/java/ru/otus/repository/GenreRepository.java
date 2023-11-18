@@ -1,10 +1,14 @@
 package ru.otus.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import ru.otus.domain.Genre;
 
-public interface GenreRepository extends JpaRepository<Genre, Long> {
+import java.util.List;
 
-    Genre findByName(String name);
+public interface GenreRepository extends MongoRepository<Genre, String> {
+
+    @Query("{ 'name' : ?0 }")
+    List<Genre> findGenreByName(String name);
 
 }

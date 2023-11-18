@@ -1,11 +1,14 @@
 package ru.otus.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import ru.otus.domain.Author;
 
 import java.util.List;
 
-public interface AuthorRepository extends JpaRepository<Author, Long> {
-    List<Author> findByNameIgnoreCase(String name);
+public interface AuthorRepository extends MongoRepository<Author, String> {
+
+    @Query("{ 'name' : ?0 }")
+    List<Author> findAuthorByName(String name);
 
 }
