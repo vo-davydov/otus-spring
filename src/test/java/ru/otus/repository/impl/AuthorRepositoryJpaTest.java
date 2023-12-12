@@ -2,6 +2,7 @@ package ru.otus.repository.impl;
 
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,14 @@ public class AuthorRepositoryJpaTest {
     private TestEntityManager em;
 
     private static final int EXPECTED_QUERIES_COUNT = 1;
+
+    @BeforeEach
+    public void clearStatistics() {
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+        sessionFactory.getStatistics().clear();
+    }
 
     @DisplayName("Should save author")
     @Test

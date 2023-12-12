@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.otus.dto.BookDto;
 
 import java.util.Objects;
 
@@ -61,5 +62,9 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public BookDto toDto() {
+        return new BookDto(id, name, author.getName(), genre.getName());
     }
 }

@@ -62,7 +62,6 @@ class BookServiceImplTest {
 
         assertThatCode(() -> bookService.saveBook(bookDto))
                 .doesNotThrowAnyException();
-
     }
 
     @Test

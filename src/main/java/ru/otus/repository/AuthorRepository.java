@@ -6,6 +6,7 @@ import ru.otus.domain.Author;
 import java.util.List;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
+
     List<Author> findByNameIgnoreCase(String name);
 
 }
