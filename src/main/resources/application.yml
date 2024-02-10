@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      database: dbbook
+core:
+  migration-packages:
+    - ru.otus.changelog
