@@ -27,6 +27,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -66,7 +67,9 @@ public class BookRestControllerTest {
         );
         Mockito.when(bookService.getBooks()).thenReturn(expectedBooks);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/")
+                        .with(user("user").password("password").roles("USER"))
+                )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(expectedBook.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(expectedBook.getName()))
@@ -83,7 +86,8 @@ public class BookRestControllerTest {
         long bookId = 1L;
         Mockito.when(bookService.getBookById(Mockito.anyLong())).thenReturn(expectedBook);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/{id}", bookId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/{id}", bookId)
+                        .with(user("user").password("password").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(bookId))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedBook.getName()))
@@ -99,8 +103,11 @@ public class BookRestControllerTest {
         Mockito.doNothing().when(bookService).saveBook(Mockito.any(BookDto.class));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/books/")
+
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(bookDto)))
+                        .content(new ObjectMapper().writeValueAsString(bookDto))
+                        .with(user("user").password("password").roles("USER"))
+                )
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -113,7 +120,8 @@ public class BookRestControllerTest {
         long bookId = 1L;
         Mockito.doNothing().when(bookService).deleteBookById(Mockito.anyLong());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/{id}", bookId))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/{id}", bookId)
+                        .with(user("user").password("password").roles("USER")))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -127,6 +135,7 @@ public class BookRestControllerTest {
         String jsonPayload = "{\"id\": 1, \"name\": \"Updated Book\"}";
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/api/books/")
+                .with(user("user").password("password").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload));
 

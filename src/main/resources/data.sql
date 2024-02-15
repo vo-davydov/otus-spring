@@ -29,3 +29,24 @@ insert into COMMENT (TEXT, BOOK_ID)
 values ('OMG the best book', 1);
 insert into COMMENT (TEXT, BOOK_ID)
 values ('better not read at all', 2);
+
+insert into ROLE (ROLE)
+values ('ROLE_ADMIN');
+insert into ROLE (ROLE)
+values ('ROLE_USER');
+
+--adminka
+insert into SYS_USER (username, password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled)
+values ('admin', '$2a$10$fENzVZSPiZEjKWjSopzW1e2Qz2Kx9MusWR8ziMeRl9AeURPqypYia', true, true, true, true);
+--123456
+insert into SYS_USER (username, password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled)
+values ('user', '$2a$10$DC.czE1pkzgLgi9AdauH0uRPLbOHPQFtlzeLhhUvgG7KQ/bF3k2Zm', true, true, true, true);
+
+insert into USER_ROLES (USER_ID, ROLE_ID)
+values (1, 1);
+
+insert into USER_ROLES (USER_ID, ROLE_ID)
+values (1, 2);
+
+insert into USER_ROLES (USER_ID, ROLE_ID)
+values (2, 2);
