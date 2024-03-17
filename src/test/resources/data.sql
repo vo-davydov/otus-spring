@@ -23,5 +23,3 @@ values ('Clean Code: A Handbook of Agile Software Craftsmanship', 3, 3);
 
 insert into COMMENT (TEXT, BOOK_ID)
 values ('BAD BAD', 1);
-
-

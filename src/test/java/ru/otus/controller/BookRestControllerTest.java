@@ -2,8 +2,9 @@ package ru.otus.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
@@ -11,17 +12,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.otus.config.SecurityConfig;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 import ru.otus.dto.BookDto;
 import ru.otus.service.BookService;
 
+import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(BookRestController.class)
+@Import(SecurityConfig.class)
 public class BookRestControllerTest {
 
     @Autowired
@@ -39,6 +45,12 @@ public class BookRestControllerTest {
 
     @MockBean
     private BookService bookService;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
+
+    @MockBean
+    private DataSource dataSource;
 
     private Genre expectedGenre;
 
@@ -59,8 +71,9 @@ public class BookRestControllerTest {
         expectedBook2 = new Book(4L, "The Dark Tower", expectedAuthor, expectedGenre);
     }
 
-    @Test
-    public void testGetAllBooks() throws Exception {
+    @ParameterizedTest
+    @CsvSource({"admin,adminka", "user,password"})
+    public void testGetAllBooks(String username, String password) throws Exception {
         List<Book> expectedBooks = Arrays.asList(
                 expectedBook,
                 expectedBook2
@@ -68,7 +81,7 @@ public class BookRestControllerTest {
         Mockito.when(bookService.getBooks()).thenReturn(expectedBooks);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/books/")
-                        .with(user("user").password("password").roles("USER"))
+                        .with(user(username).password(password).roles("USER"))
                 )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(expectedBook.getId()))
@@ -81,13 +94,14 @@ public class BookRestControllerTest {
         Mockito.verifyNoMoreInteractions(bookService);
     }
 
-    @Test
-    public void testGetBookById() throws Exception {
+    @ParameterizedTest
+    @CsvSource({"admin,adminka", "user,password"})
+    public void testGetBookById(String username, String password) throws Exception {
         long bookId = 1L;
         Mockito.when(bookService.getBookById(Mockito.anyLong())).thenReturn(expectedBook);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/books/{id}", bookId)
-                        .with(user("user").password("password").roles("USER")))
+                        .with(user(username).password(password).roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(bookId))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedBook.getName()))
@@ -97,8 +111,9 @@ public class BookRestControllerTest {
         Mockito.verifyNoMoreInteractions(bookService);
     }
 
-    @Test
-    public void testSaveBook() throws Exception {
+    @ParameterizedTest
+    @CsvSource({"admin,adminka", "user,password"})
+    public void testSaveBook(String username, String password) throws Exception {
         BookDto bookDto = expectedBook2.toDto();
         Mockito.doNothing().when(bookService).saveBook(Mockito.any(BookDto.class));
 
@@ -106,7 +121,7 @@ public class BookRestControllerTest {
 
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(bookDto))
-                        .with(user("user").password("password").roles("USER"))
+                        .with(user(username).password(password).roles("USER"))
                 )
                 .andExpect(status().isOk())
                 .andReturn();
@@ -115,13 +130,14 @@ public class BookRestControllerTest {
         Mockito.verifyNoMoreInteractions(bookService);
     }
 
-    @Test
-    public void testDeleteBook() throws Exception {
+    @ParameterizedTest
+    @CsvSource({"admin,adminka", "user,password"})
+    public void testDeleteBook(String username, String password) throws Exception {
         long bookId = 1L;
         Mockito.doNothing().when(bookService).deleteBookById(Mockito.anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/{id}", bookId)
-                        .with(user("user").password("password").roles("USER")))
+                        .with(user(username).password(password).roles("USER")))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -129,13 +145,14 @@ public class BookRestControllerTest {
         Mockito.verifyNoMoreInteractions(bookService);
     }
 
-    @Test
-    public void testEditBook() throws Exception {
+    @ParameterizedTest
+    @CsvSource({"admin,adminka", "user,password"})
+    public void testEditBook(String username, String password) throws Exception {
         BookDto bookDto = new BookDto(1L, "Updated Book", "Test", "Test");
         String jsonPayload = "{\"id\": 1, \"name\": \"Updated Book\"}";
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/api/books/")
-                .with(user("user").password("password").roles("USER"))
+                .with(user(username).password(password).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload));
 

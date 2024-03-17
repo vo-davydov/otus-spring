@@ -1,6 +1,7 @@
 package ru.otus.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.domain.Author;
@@ -37,13 +38,18 @@ public class BookServiceImpl implements BookService {
     private void createOrUpdateBook(BookDto bookDto, Author author, Genre genre) {
         var book = bookDto.getId() != null ? bookRepository.findById(bookDto.getId()).orElse(null) : null;
         if (book == null) {
-            bookRepository.save(new Book(bookDto.getName(), author, genre));
+            saveBook(new Book(bookDto.getName(), author, genre));
         } else {
             book.setGenre(genre);
             book.setAuthor(author);
             book.setName(bookDto.getName());
-            bookRepository.save(book);
+            saveBook(book);
         }
+    }
+
+    @PreAuthorize("hasPermission(#book, 'WRITE')")
+    private void saveBook(Book book) {
+        bookRepository.save(book);
     }
 
     private Genre findOrCreateNewGenre(BookDto bookDto) {
